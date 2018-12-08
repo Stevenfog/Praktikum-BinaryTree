@@ -1,0 +1,275 @@
+#include <stdio.h>
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+#define Nil NULL
+
+#define boolean unsigned char
+#define true 1
+#define false 0
+
+/********** Selektor **********/
+#define Akar(P) (P)->info
+#define Left(P) (P)->left
+#define Right(P) (P)->right
+
+typedef int infotype;
+typedef struct tNode *addrNode;
+typedef struct tNode {
+    infotype info;
+    addrNode left;
+    addrNode right;
+} Node;
+
+/* Definisi PohonBiner : */
+/* Pohon Biner kosong : P = Nil */
+
+typedef addrNode BinTree;
+
+/********** MEMORY MANAGEMENT **********/
+/*** Alokasi data ***/
+addrNode AlokNode (infotype X)
+/* Mengirimkan addrNode hasil alokasi sebuah elemen */
+/* Jika alokasi berhasil, maka addrNode tidak Nil, dan misalnya menghasilkan P,
+    maka Akar(P) = X, Left(P) = Nil, Right(P) = Nil */
+/* Jika alokasi gagal, mengirimkan Nil */
+{   /* Kamus Lokal */
+    addrNode P;
+    /* Algoritma */
+    P = (addrNode) malloc (sizeof (Node));
+    if (P != Nil) {
+        Akar(P) = X;
+        Left(P) = Nil;
+        Right(P) = Nil;
+        return P;
+    } else {
+         return Nil;
+    }
+}
+
+/*** Dealokasi data ***/
+void Dealokasi (addrNode P)
+/* I.S. P terdefinisi */
+/* F.S. P dikembalikan ke sistem */
+/* Melakukan dealokasi/pengembalian addrNode P*/
+{   /* Kamus Lokal */
+    /* Algoritma */
+    free(P);
+}
+
+/********** KONSTRUKTOR **********/
+BinTree Tree (infotype Akar, BinTree L, BinTree R)
+/* Mengalokasikan sebuah pohon biner dari A, L, dan R, jika alokasi berhasil */
+/* Menghasilkan pohon kosong (Nil) jika alokasi gagal */
+{   /* Kamus Lokal */
+    BinTree P;
+    /* Algoritma */
+    P = AlokNode(Akar);
+    if (P != Nil) {
+        Left(P) = L;
+        Right(P) = R;
+    }
+    return P;
+}
+
+void MakeTree (infotype Akar, BinTree L, BinTree R, BinTree *P)
+/* I.S. Akar, L, R, terdefinisi. P sembarang */
+/* F.S. Membentuk pohon P dengan Akar(P) = Akar, Left(P) = L, dan Right(P) = R
+        jika alokasi berhasil.
+        P = Nil jika alokasi gagal */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    *P = AlokNode(Akar);
+    if (*P != Nil){
+        Left(*P) = L;
+        Right(*P) = R;
+    }
+}
+
+/********** PROTOTYPE **********/
+/*** Test pohon kosong ***/
+boolean IsTreeEmpty (BinTree P)
+/* Mengirimkan true jika P adalah pohon biner kosong */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    return (P == Nil);
+}
+
+/*** Test pohon hanya memiliki satu data ***/
+boolean IsTreeOneElmt (BinTree P)
+/* Mengirimkan true jika P adalah pohon biner tidak kosong dan hanya memiliki 
+    satu element */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (P != Nil) {
+        return (Left(P) == Nil && Right (P) == Nil);
+    } else {    /* Pohon Kosong */
+    return false;
+    }
+}
+
+/*** Test pohon hanya memiliki subpohon kiri ***/
+boolean IsUnerLeft (BinTree P)
+/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon 
+    unerleft: hanya mempunyai subpohon kiri */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (P != Nil) {
+        return (Left(P) != Nil && Right(P) == Nil);
+    } else { /* Pohon kosong */
+        return false;
+    }
+}
+
+/*** Test pohon hanya memiliki subpohon kanan ***/
+boolean IsUnerRight (BinTree P)
+/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon 
+    unerright: hanya mempunyai subpohon kanan*/
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (P != Nil) {
+        return (Left(P) == Nil && Right(P) != Nil);
+    } else { /* Pohon kosong */
+        return false;
+    }
+}
+
+/*** Test pohon memiliki subpohon kiri dan kanan ***/
+boolean IsBiner (BinTree P)
+/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon 
+    biner: mempunyai subpohon kiri dan subpohon kanan*/
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (P != Nil) {
+        return (Left(P) != Nil && Right(P) != Nil);
+    } else { /* Pohon kosong */
+        return false;
+    }
+}
+
+void PreOrder (BinTree P) 
+/* I.S. Pohon P terdefinisi */
+/* F.S. Semua node pohon P sudah diproses secara PreOrder: akar, kiri, kanan */
+/* Basis : Pohon kosong : tidak ada yang diproses */
+/* Rekurens : Proses Akar(P); 
+              Proses secara Preorder (Left(P)); 
+              Proses secara Preorder (Right(P)) */
+{   /* KAMUS LOKAL */
+    /* ALGORITMA */
+    if (IsTreeEmpty(P)){  /* Basis-0 */
+        /* do nothing */
+    } else { /* Rekurens, tidak kosong */
+        Akar(P);
+        PreOrder(Left(P));
+        PreOrder(Right(P));
+    }
+}
+
+void PrintPreorder (BinTree P)
+/* I.S. P terdefinisi */
+/* F.S. Semua simpul P sudah dicetak secara preorder: akar, pohon kiri, dan pohon kanan. 
+    Setiap pohon ditandai dengan tanda kurung buka dan kurung tutup (). 
+    Pohon kosong ditandai dengan (). */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    printf("(");
+    if (IsTreeEmpty(P)) {
+        /* do nothing */
+    } else {
+        printf("%d",Akar(P));
+        PrintPreorder(Left(P));
+        PrintPreorder(Right(P));
+    }
+    printf(")");
+}
+
+void PrintDaunPreorder (BinTree P)
+/* I.S. P terdefinisi */
+/* F.S. Semua daun pada pohon P sudah dicetak secara preorder: akar, kiri, dan kanan. */
+/* Basis : Pohon 1 elemen : Cetak informasi akar */
+/* Rekurens : Cetak daun pohon kiri;
+              Cetak daun pohon kanan */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (IsTreeOneElmt(P)) {
+        printf("%d ",Akar(P));
+    } else {
+        PrintPreorder(Left(P));
+        PrintPreorder(Right(P));
+    }
+}
+
+void InOrder (BinTree P) 
+/* I.S. Pohon P terdefinisi */
+/* F.S. Semua node pohon P sudah diproses secara inorder: kiri, akar, kanan */
+/* Basis : Pohon kosong : tidak ada yang diproses */
+/* Rekurens : Proses secara inorder (Left(P)); 
+              Proses Akar(P); 
+              Proses secara inorder (Right(P)) */
+{   /* KAMUS LOKAL */
+    /* ALGORITMA */
+    if (IsTreeEmpty(P)) { /* Basis-0 */
+        /* do nothing */
+    } else { /* Rekurens, tidak kosong */
+        InOrder(Left(P));
+        Akar(P);
+        InOrder(Right(P));
+    }
+}
+
+void PrintInOrder (BinTree P) 
+/* I.S. Pohon P terdefinisi */
+/* F.S. Semua simpul P sudah dicetak secara inorder: kiri, akar, kanan. 
+    Setiap pohon ditandai dengan tanda kurung buka dan kurung tutup (). 
+    Pohon kosong ditandai dengan (). */
+{   /* KAMUS LOKAL */
+    /* ALGORITMA */
+    if (IsTreeEmpty(P)) { /* Basis-0 */
+        /* do nothing */
+    } else { /* Rekurens, tidak kosong */
+        PrintInOrder(Left(P));
+        printf("%d ",Akar(P));
+        PrintInOrder(Right(P));
+    }
+    printf(")");
+}
+
+void PrintDaunInOrder (BinTree P)
+/* I.S. P terdefinisi */
+/* F.S. Semua daun pada pohon P sudah dicetak secara inorder: kiri, akar, kanan. */
+/* Basis : Pohon 1 elemen : Cetak informasi akar */
+/* Rekurens : Cetak daun pohon kiri;
+              Cetak daun pohon kanan */
+{   /* Kamus Lokal */
+    /* Algoritma */
+    if (IsTreeOneElmt(P)) {
+        printf("%d ",Akar(P));
+    } else {
+        PrintInOrder(Left(P));
+        PrintInOrder(Right(P));
+    }
+}
+
+void PostOrder (BinTree P) 
+/* I.S. Pohon P terdefinisi */
+/* F.S. Semua node pohon P sudah diproses secara postorder: kiri, kanan, akar */
+/* Basis : Pohon kosong : tidak ada yang diproses */
+/* Rekurens : Proses secara postorder (Left(P)); 
+              Proses secara postorder (Right(P));
+              Proses Akar(P); */
+{   /* KAMUS LOKAL */
+    /* ALGORITMA */
+    if (IsTreeEmpty(P)) { /* Basis-0 */
+        /* do nothing */
+    } else { /* Rekurens, tidak kosong */
+        PostOrder(Left(P));
+        PostOrder(Right(P));
+        Akar(P);
+    }
+}
+
+int main () {
+    
+    return 0;
+}
