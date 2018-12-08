@@ -29,6 +29,16 @@ typedef addrNode BinTree;
 
 /********** MEMORY MANAGEMENT **********/
 /*** Alokasi data ***/
+
+
+void Allocate (addrNode *P)
+{
+    //Kamus Lokal
+    
+    //Algoritma
+    *P =(addrNode) malloc(sizeof(Node));
+}
+
 addrNode AlokNode (infotype X)
 /* Mengirimkan addrNode hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka addrNode tidak Nil, dan misalnya menghasilkan P,
@@ -173,32 +183,15 @@ void PrintPreorder (BinTree P)
     Pohon kosong ditandai dengan (). */
 {   /* Kamus Lokal */
     /* Algoritma */
-    printf("(");
     if (IsTreeEmpty(P)) {
         /* do nothing */
     } else {
-        printf("%d",Akar(P));
+        printf("%d ->",Akar(P));
         PrintPreorder(Left(P));
         PrintPreorder(Right(P));
     }
-    printf(")");
 }
 
-void PrintDaunPreorder (BinTree P)
-/* I.S. P terdefinisi */
-/* F.S. Semua daun pada pohon P sudah dicetak secara preorder: akar, kiri, dan kanan. */
-/* Basis : Pohon 1 elemen : Cetak informasi akar */
-/* Rekurens : Cetak daun pohon kiri;
-              Cetak daun pohon kanan */
-{   /* Kamus Lokal */
-    /* Algoritma */
-    if (IsTreeOneElmt(P)) {
-        printf("%d ",Akar(P));
-    } else {
-        PrintPreorder(Left(P));
-        PrintPreorder(Right(P));
-    }
-}
 
 void InOrder (BinTree P) 
 /* I.S. Pohon P terdefinisi */
@@ -229,27 +222,12 @@ void PrintInOrder (BinTree P)
         /* do nothing */
     } else { /* Rekurens, tidak kosong */
         PrintInOrder(Left(P));
-        printf("%d ",Akar(P));
+        printf("%d ->",Akar(P));
         PrintInOrder(Right(P));
     }
-    printf(")");
+    
 }
 
-void PrintDaunInOrder (BinTree P)
-/* I.S. P terdefinisi */
-/* F.S. Semua daun pada pohon P sudah dicetak secara inorder: kiri, akar, kanan. */
-/* Basis : Pohon 1 elemen : Cetak informasi akar */
-/* Rekurens : Cetak daun pohon kiri;
-              Cetak daun pohon kanan */
-{   /* Kamus Lokal */
-    /* Algoritma */
-    if (IsTreeOneElmt(P)) {
-        printf("%d ",Akar(P));
-    } else {
-        PrintInOrder(Left(P));
-        PrintInOrder(Right(P));
-    }
-}
 
 void PostOrder (BinTree P) 
 /* I.S. Pohon P terdefinisi */
@@ -268,6 +246,34 @@ void PostOrder (BinTree P)
         Akar(P);
     }
 }
+
+void PrintPostOrder (BinTree P){
+
+}
+
+addrNode insertLeft (BinTree *P, infotype x){
+/*Digunakan Untuk Problem A*/
+}
+
+addrNode insertRight (BinTree *P, infotype x){
+/*Digunakan Untuk Problem A*/
+    
+}
+
+
+void AddDaunTerkanan (BinTree *P1, addrNode P2);
+/*Digunakan Untuk Problem B*/
+/* I. S. 	: P1 boleh kosong */ 
+/* F. S. 	: P1 bertambah simpulnya, dengan P2 sebagai simpul daun terkanan */
+
+
+void pohonGanjil (Bintree *P);
+/*Digunakan Untuk Problem B*/
+/* I. S.	: P tidak kosong */
+/* F. S.	: menghapus semua elemen genap di dalam pohon  biner 
+			  Jika node bernilai genap dan memiliki 2 daun,
+			  maka Right(P) menjadi daun terkanan dari Left(P),
+			  kemudian node dihapus*/
 
 int main () {
     
